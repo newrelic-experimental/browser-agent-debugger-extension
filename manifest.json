@@ -1,0 +1,36 @@
+{
+  "manifest_version": 3,
+  "name": "New Relic Browser Agent Injector",
+  "version": "1.0",
+  "description": "A Chrome extension for injecting scripts and managing browser actions.",
+  "permissions": [
+    "activeTab",
+    "scripting",
+    "storage",
+    "tabs"
+  ],
+  "background": {
+    "service_worker": "src/background/background.js"
+  },
+  "action": {
+    "default_popup": "src/popup/popup.html",
+    "default_icon": {
+      "16": "assets/icon_16.png",
+      "32": "assets/icon_32.png",
+      "128": "assets/icon_128.png"
+    }
+  },
+  "content_scripts": [
+    {
+      "matches": ["<all_urls>"],
+      "js": ["src/content/content.js"],
+      "run_at": "document_start"
+    }
+  ],
+  "devtools_page": "src/devtools/devtools.html",
+  "icons": {
+    "16": "assets/icon_16.png",
+    "32": "assets/icon_32.png",
+    "128": "assets/icon_128.png"
+  }
+}

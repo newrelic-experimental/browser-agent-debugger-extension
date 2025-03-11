@@ -1,0 +1,148 @@
+html{
+    scrollbar-color: #5dcb9b #192129;
+    scrollbar-width: thin;
+}
+
+body {
+    font-family: Arial, sans-serif;
+    background-color: #192129;
+    color: #eee;
+    margin: 0;
+    padding: 0 10px 10px 10px;
+    width: 100vw;
+    overflow-x: hidden;
+    scrollbar-color: #5dcb9b #192129;
+    scrollbar-width: thin;
+}
+
+h1 {
+    font-size: 24px;
+    color: #333;
+}
+
+p {
+    font-size: 14px;
+    color: #666;
+}
+
+.bold{
+    font-weight: bolder;
+}
+
+#toolbar {
+    position: sticky;
+    top: 0;
+    background-color: #192129;;
+    padding-bottom: 5px;
+    width: 100vw;
+    overflow: hidden;
+    scrollbar-color: #5dcb9b #192129;
+    scrollbar-width: thin;
+}
+
+#content {
+    width: 100vw;
+}
+
+table{
+    padding: inherit 5px;
+    width: 100vw;
+    overflow-x: hidden;
+    scrollbar-color: #5dcb9b #192129;
+    scrollbar-width: thin;
+}
+
+table {
+    border-spacing: 0 2px;
+  }
+/* tbody, td, thead, tr, table {
+    border-style: 1px solid black;
+    border-collapse: collapse;
+} */
+
+tbody td {
+    padding: 15px;
+    font-size: 0.75rem;
+    width: 100vw;
+    overflow-x: hidden;
+    scrollbar-color: #5dcb9b #192129;
+    scrollbar-width: thin;
+}
+
+th {
+    text-align: left;
+    padding-left: 15px !important;
+}
+
+tr{
+    padding: 10px 0;
+    border-radius: 5px;
+    width: 100vw;
+    overflow-x: hidden;
+    scrollbar-color: #5dcb9b #192129;
+    scrollbar-width: thin;
+    border-radius: 2px;
+}
+
+.origin, .window-load, .dom-content-loaded, .navigate {
+    background-color: #f2b4a3;
+    color: black;
+}
+
+.load, .initialize, .drain {
+    background-color: #f38989;
+    color: black;
+}
+
+.api{
+    background-color: #ffdbc2;
+    color: black;
+}
+
+.buffer{
+    background-color: #5dcb9b;
+    color: black;
+}
+
+.harvest {
+    background-color: #04a45c;
+    color: black;
+}
+
+
+
+.small-cell{
+    max-width: 10%;
+}
+
+.large-cell{
+    max-width: 60%
+}
+
+.hidden {
+    display: none !important;
+}
+
+.viewport-toggles {
+    display: flex;
+    justify-content: left;
+    align-items: center;
+    margin: 0 10px 10px 0 !important;
+}
+
+#toolbar > div {
+    margin-left: 5px;
+}
+
+button {
+    border:none;
+    background-color:transparent;
+    outline:none;
+    border-radius: 5px;
+    padding: 5px;
+}
+
+button:hover {
+    background-color: #333;
+    cursor: pointer;
+}

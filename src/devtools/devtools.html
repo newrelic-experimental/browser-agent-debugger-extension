@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>NRBA Injector DevTools</title>
+    <link rel="stylesheet" href="devtools.css">
+    <script defer src="pretty-json.js"></script>
+</head>
+<body>
+    <div id="devtools-panel">
+        <div id="content">
+            <div id="toolbar">
+                <div class="viewport-toggles">
+                    <button id="collapse" title="Collapse/Expand Settings">⚙️</button>
+                    <button id="clear-data" title="Clear All Data">🗑️</button>
+                    <button id="toggle-all" title="Toggle All Settings" data-hideable class="hidden">☑️</button>
+                    <input type="checkbox" id="capture-data" value="capture-data" checked><label for="capture-data">Capture Events (<span id="event-count">0</span>)</label>
+                    <input type="checkbox" id="auto-scroll" value="auto-scroll"><label for="auto-scroll">Auto Scroll</label>
+                </div>
+                <div data-hideable class="hidden">
+                    <div class="bold">Event Name</div>
+                    <input type="checkbox" id="origin" value="origin" checked><label for="origin">Window Origin</label>
+                    <input type="checkbox" id="dom-content-loaded" value="dom-content-loaded" checked><label for="dom-content-loaded">DOM Content Loaded</label>
+                    <input type="checkbox" id="window-load" value="window-load" checked><label for="window-load">Window Load</label>
+                    <input type="checkbox" id="navigate" value="navigate" checked><label for="navigate">Window Navigate</label>
+                    <input type="checkbox" id="initialize" value="initialize" checked><label for="initialize">Agent Initialize</label>
+                    <input type="checkbox" id="load" value="load" checked><label for="load">Agent Load</label>
+                    <input type="checkbox" id="buffer" value="buffer" checked><label for="buffer">Agent Buffer</label>
+                    <input type="checkbox" id="harvest" value="harvest" checked><label for="harvest">Agent Harvest</label>
+                    <input type="checkbox" id="api" value="api" checked><label for="api">Agent API</label>
+                    <input type="checkbox" id="drain" value="drain" checked><label for="drain">Drain</label>
+                </div>
+                <hr data-hideable class="hidden" />
+                <div data-hideable class="hidden">
+                    <div class="bold">Event Type</div>
+                    <input type="checkbox" id="window" value="window" checked><label for="window">Window</label>
+                    <input type="checkbox" id="lifecycle" value="lifecycle" checked><label for="lifecycle">Agent Lifecycle</label>
+                    <input type="checkbox" id="data" value="data" checked><label for="data">Agent Data</label>
+                </div>
+                <hr data-hideable class="hidden"/>
+                <div data-hideable class="hidden">
+                    <div class="bold">Feature</div>
+                    <input type="checkbox" id="ajax" value="ajax" checked><label for="ajax">AjaxRequest</label>
+                    <input type="checkbox" id="generic_events" value="generic_events" checked><label for="generic_events">Generic Events</label>
+                    <input type="checkbox" id="jserrors" value="jserrors" checked><label for="jserrors">JavaScriptError</label>
+                    <input type="checkbox" id="logging" value="logging" checked><label for="logging">Log</label>
+                    <input type="checkbox" id="metrics" value="metrics" checked><label for="metrics">Metrics</label>
+                    <input type="checkbox" id="page_view_event" value="page_view_event" checked><label for="page_view_event">PageView</label>
+                    <input type="checkbox" id="page_view_timing" value="page_view_timing" checked><label for="page_view_timing">PageViewTiming</label>
+                    <input type="checkbox" id="session_replay" value="session_replay" checked><label for="session_replay">Session Replay</label>
+                    <input type="checkbox" id="session_trace" value="session_trace" checked><label for="session_trace">Session Trace</label>
+                    <input type="checkbox" id="soft_navigations" value="soft_navigations" checked><label for="soft_navigations">Soft Navigations</label>
+                    <input type="checkbox" id="spa" value="spa" checked><label for="spa">SPA</label>
+                    <input type="checkbox" id="shared_aggregator" value="shared_aggregator" checked><label for="shared_aggregator">Shared Aggregator</label>
+                    <input type="checkbox" id="session" value="session" checked><label for="session">Session</label>
+                </div>
+                <hr data-hideable class="hidden"/>
+                <div data-hideable class="hidden">
+                    <input type="text" id="search" placeholder="Search" style="width:75%">
+                </div>
+            </div>
+            <div id="no-content">
+                <div>
+                    <h1>NRBA Injector DevTools</h1>
+                    <p>Ensure that a browser agent is running on the page to view debugging events.</p>
+                </div>
+            </div>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Timestamp</th>
+                        <th>Type</th>
+                        <th>Name</th>
+                        <th>Feature</th>
+                        <th>Data</th>
+                    </tr>
+                </thead>
+                <tbody id="table-body">
+                </tbody>
+            </table>
+            <!-- DevTools content will be dynamically injected here -->
+        </div>
+    </div>
+    <script src="devtools.js"></script>
+</body>
+</html>
