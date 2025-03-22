@@ -9,6 +9,7 @@ const filters = {
     harvest: true,
     api: true,
     drain: true,
+    ['long-task']: true,
     window: true,
     origin: true,
     ['window-load']: true,
@@ -87,10 +88,24 @@ function appendMessage(message){
     const type = `<td class="small-cell">${message.event.type}</td>`
     const name = `<td class="small-cell">${message.event.name}</td>`
     const feature = `<td class="small-cell">${message.event.feature}</td>`
-    const dataContents = eventData ? `<td class="large-cell"><pretty-json title=${eventData}>${eventData}</pretty-json></td>` : '<td></td>'
+    
+    let prettyJson
+    try{
+        prettyJson = document.createElement('pretty-json')
+        prettyJson.title = eventData
+        prettyJson.innerText = eventData
+    } catch (e){
+        console.error('CAUGHT ERROR!', e)
+    }
+    const dataContents = document.createElement('td')
+    dataContents.classList.add('large-cell')
+    dataContents.appendChild(prettyJson)
+
     const row = document.createElement('tr')
-    row.innerHTML = `${timestamp}${type}${name}${feature}${dataContents}`
+    row.innerHTML = `${timestamp}${type}${name}${feature}`
+    row.appendChild(dataContents)
     row.classList.add(message.event.name)
+
     document.querySelector('#content>table>#table-body').appendChild(row)
     if (autoScroll) row.scrollIntoView({ block: 'end',  behavior: 'smooth' })
     document.querySelector('#event-count').innerText = data.size

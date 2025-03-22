@@ -94,6 +94,11 @@ tr{
     color: black;
 }
 
+.long-task{
+    background-color: #f0663f;
+    color: black;
+}
+
 .api{
     background-color: #ffdbc2;
     color: black;
