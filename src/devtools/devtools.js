@@ -85,7 +85,6 @@ function appendMessage(message){
     if (!!textSearch && JSON.stringify(message).indexOf(textSearch) === -1) return
     const eventData = message.event.data ? JSON.stringify(message.event.data) : ''
     const timestamp = `<td class="small-cell">${message.timeStamp}</td>`
-    const type = `<td class="small-cell">${message.event.type}</td>`
     const name = `<td class="small-cell">${message.event.name}</td>`
     const feature = `<td class="small-cell">${message.event.feature}</td>`
     
@@ -102,7 +101,11 @@ function appendMessage(message){
     dataContents.appendChild(prettyJson)
 
     const row = document.createElement('tr')
-    row.innerHTML = `${timestamp}${type}${name}${feature}`
+    row.innerHTML = `
+    ${timestamp}
+    ${name}
+    ${feature}
+    `
     row.appendChild(dataContents)
     row.classList.add(message.event.name)
 
@@ -156,4 +159,15 @@ document.querySelector('#toggle-all').addEventListener('click', () => {
 
 document.querySelector('#collapse').addEventListener('click', (evt) => {
     document.querySelectorAll('[data-hideable]').forEach(elem => elem.classList.toggle('hidden'))
+})
+
+/** disable auto-scroll if we scroll upward */
+let scrollTop = 0
+document.addEventListener('scrollend', evt => {
+    const newScrollTop = document.documentElement.scrollTop
+    if (newScrollTop < scrollTop) {
+        document.querySelector('#auto-scroll').checked = false
+        autoScroll = false
+    }
+    scrollTop = newScrollTop
 })

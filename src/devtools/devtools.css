@@ -34,7 +34,7 @@ p {
     top: 0;
     background-color: #192129;;
     padding-bottom: 5px;
-    width: 100vw;
+    width: calc(100vw - 20px);
     overflow: hidden;
     scrollbar-color: #5dcb9b #192129;
     scrollbar-width: thin;
@@ -117,11 +117,11 @@ tr{
 
 
 .small-cell{
-    max-width: 10%;
+    max-width: 10vw !important;
 }
 
 .large-cell{
-    max-width: 60%
+    max-width: 60vw;
 }
 
 .hidden {
