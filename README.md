@@ -1,7 +1,7 @@
 # New Relic Browser Agent Debugger Extension
 
 ## Overview
-The New Relic Browser Agent Debugger Extension is a Chrome extension designed to display debugging events emitted by the browser agent in real time.  The project is currently *under development* but is in a state that can be used and experimented with.  See #installation to get started with debugging browser agent events.
+The New Relic Browser Agent Debugger Extension is a Chrome extension designed to display debugging events emitted by the browser agent in real time.  The project is currently *under development* but is in a state that can be used and experimented with.  See [installation](#installation) to get started with debugging browser agent events.
 
 ## Project Structure
 ```
@@ -31,8 +31,8 @@ nrba-injector-extension-v3
 5. Ensure the extension shows in the open `extensions` page, and that it is enabled.
 
 ## Usage
-1. Access the NR Browser Agent DevTools panel by pressing `command + option + i` or right-clicking on a web page and selecting "Inspect" 
-2. then navigate to the "NRBA" tab.
+1. Access the NR Browser Agent DevTools panel by pressing `command + option + i` or right-clicking on a web page and selecting "Inspect".
+2. Then navigate to the "NRBA" tab.
 3. Open the filters and toggle the settings to find, show, or hide certain event types.
 
 ## Disclaimer 
