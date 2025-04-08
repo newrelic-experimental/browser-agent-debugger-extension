@@ -1,7 +1,7 @@
-# NRBA Injector Extension v3
+# New Relic Browser Agent Debugger Extension
 
 ## Overview
-The NRBA Injector Extension is a Chrome extension designed to enhance web browsing by allowing users to inject custom scripts and styles into web pages. This extension provides a user-friendly popup interface and integrates with Chrome DevTools for advanced functionality.
+The New Relic Browser Agent Debugger Extension is a Chrome extension designed to display debugging events emitted by the browser agent in real time.  The project is currently *under development* but is in a state that can be used and experimented with.  See #installation to get started with debugging browser agent events.
 
 ## Project Structure
 ```
@@ -27,12 +27,16 @@ nrba-injector-extension-v3
 1. Clone the repository or download the source code.
 2. Open Chrome and navigate to `chrome://extensions/`.
 3. Enable "Developer mode" using the toggle in the top right corner.
-4. Click on "Load unpacked" and select the `nrba-injector-extension-v3` directory.
+4. Click on "Load unpacked" and select the `browser-agent-debugger-extension` directory.
+5. Ensure the extension shows in the open `extensions` page, and that it is enabled.
 
 ## Usage
-- Click on the extension icon in the Chrome toolbar to open the popup.
-- Use the popup to interact with the extension's features.
-- Access the DevTools panel by right-clicking on a web page and selecting "Inspect", then navigating to the "NRBA" tab.
+1. Access the NR Browser Agent DevTools panel by pressing `command + option + i` or right-clicking on a web page and selecting "Inspect" 
+2. then navigate to the "NRBA" tab.
+3. Open the filters and toggle the settings to find, show, or hide certain event types.
+
+## Disclaimer 
+This project is under development and probably full of more bugs than a summer camp bunkbed. Use with that expectation in mind until a more stable product is developed.  Contributions and issues are welcome to improve development speed.
 
 ## Contributing
 Contributions are welcome! Please submit a pull request or open an issue for any enhancements or bug fixes.
