@@ -1,5 +1,8 @@
-let data = new Set()
-let uniqueIds = new Set()
+let data = []
+let uniqueIds = new Map()
+
+let rowContent = ''
+let rowContentCount = 0
 
 const filters = {
     undefined: true,
@@ -29,12 +32,20 @@ const filters = {
     soft_navigations: true,
     spa: true,
     shared_aggregator: true,
-    session: true
+    session: true,
+    // attributes
+    count: true,
+    timestamp: true,
+    name: true,
+    type: false,
+    feature: true,
+    "raw-data": true,
 }
 
 let autoScroll = false
 let captureData = true
 let textSearch = ''
+let dataFilter = ''
 
 chrome.devtools.panels.create(
     "NR Browser Agent DevTools",
@@ -44,6 +55,7 @@ chrome.devtools.panels.create(
       console.log("NRBA Injector panel created", panel);
       panel.onShown.addListener(function(window) {
         console.log("panel shown", window);
+
         chrome.runtime.sendMessage({ message: 'devtools_ready' }, (response) => {
             console.log('Response from background.js:', response);
         })
@@ -51,9 +63,23 @@ chrome.devtools.panels.create(
     }
   );
 
+
+window.addEventListener('DOMContentLoaded', () => {
+
+    const img = document.querySelector('#loading>img')
+    img.src = chrome.runtime.getURL('assets/spinner.gif')
+    img.alt = '... Receiving Data From Web Page ...'
+    img.title = '... Receiving Data From Web Page ...'
+})
+
 var backgroundPageConnection = chrome.runtime.connect({
     name: "devtools-page"
 });
+
+backgroundPageConnection.onDisconnect.addListener(function () {
+    const loadingBlock = document.querySelector('#loading')
+    loadingBlock.innerHTML = '❌ D I S C O N N E C T E D ❌ Please close dev tools, refresh the page and re-open'
+})
 
 backgroundPageConnection.onMessage.addListener(function (message) {
     if (message.message === 'content_ready'){
@@ -61,58 +87,155 @@ backgroundPageConnection.onMessage.addListener(function (message) {
         return
     }
     if (!captureData || !message.event || uniqueIds.has(message.uniqueId)) return
-    uniqueIds.add(message.uniqueId)
-    data.add(message)
-    document.querySelector('#event-count').innerText = data.size
+    uniqueIds.set(message.uniqueId, message)
+
+    data.push(message)
+
+    try{
+        const count = document.querySelector(`#${message.event.feature}-count`)
+        count.innerText = count.innerText ? parseInt(count.innerText) + 1 : 1
+    } catch(err){}
+
     appendMessage(message)
+    debouncedRender()
 });
+
+function debounce (func, timeout = 500, options = {}) {
+    const leading = options?.leading || true
+    let timer
+    return (...args) => {
+      if (leading && timer === undefined) {
+        func.apply(this, args)
+        timer = setTimeout(() => { timer = clearTimeout(timer) }, timeout)
+      }
+  
+      if (!leading) {
+        clearTimeout(timer)
+        timer = setTimeout(() => { func.apply(this, args) }, timeout)
+      }
+    }
+  }
 
 /**
  * this re-renders the full list.  Should only be done ad-hoc for toolbar changes
  */
 function reRenderData(){
-    document.querySelector('#content>table>#table-body').innerHTML = ''
+    console.log("reRenderData called")
+    rowContent = ''
+    rowContentCount = 0
     data.forEach(appendMessage)
+    render()
 }
+
+function render(){
+    console.log("render called")
+    const tableBody = document.querySelector('#content>table>#table-body')
+    tableBody.innerHTML = rowContent
+    if (autoScroll) tableBody.scrollIntoView({ block: 'end',  behavior: 'smooth' })
+    document.querySelector('#event-count').innerText = data.length
+
+    tableBody.childNodes.forEach((row, idx) => {
+        row.addEventListener('click', (evt) => {
+            const dataset = uniqueIds.get(evt.target.dataset.uniqueId)
+            const dataString = JSON.stringify(dataset.event.data)
+
+            const expandContents = document.querySelector('#expand-contents')
+            expandContents.innerHTML = ''
+            let textContent = document.createElement('span')
+            try{
+                textContent = document.createElement('pretty-json')
+                textContent.title = dataString
+                textContent.innerText = dataString
+            } catch (e){
+                console.error('CAUGHT ERROR!', e)
+            }
+            expandContents.appendChild(textContent)
+
+            document.querySelector('#expand-title').innerText = dataset.event.feature
+
+            document.querySelector('#expand').classList.remove('hidden')
+            document.querySelector('table').classList.add('hidden')
+
+        })
+    })
+}
+
+function renderHeader(){
+    const timestampHead = filters.timestamp ? `<th>Timestamp</th>` : ''
+    const typeHead = filters.type ? `<th>Type</th>` : ''
+    const nameHead = filters.name ? `<th>Name</th>` : ''
+    const featureHead = filters.feature ? `<th>Feature</th>` : ''
+    const dataHead = filters['raw-data'] ? `<th>Raw Data</th>` : ''
+
+    const tableHead = `<tr>${timestampHead}${typeHead}${nameHead}${featureHead}${dataHead}</tr>`
+    document.querySelector('#content>table>thead').innerHTML = tableHead
+}
+
+const debouncedReRender = debounce(reRenderData, 1000)
+const debouncedRender = debounce(render, 1000)
 
 /**
  * append a message to the end of the already rendered list
  * @param {*} message 
  */
 function appendMessage(message){
-    document.querySelector('#no-content').classList.toggle('hidden', !!data.size)
+    document.querySelector('#no-content').classList.toggle('hidden', !!data.length)
+    document.querySelector('#loading').classList.toggle('hidden', !data.length)
     if (!message.event || !filters[message.event.name] || !filters[message.event.type] || !filters[message.event.feature]) return
     if (!!textSearch && JSON.stringify(message).indexOf(textSearch) === -1) return
-    const eventData = message.event.data ? JSON.stringify(message.event.data) : ''
-    const timestamp = `<td class="small-cell">${message.timeStamp}</td>`
-    const name = `<td class="small-cell">${message.event.name}</td>`
-    const feature = `<td class="small-cell">${message.event.feature}</td>`
-    
-    let prettyJson
-    try{
-        prettyJson = document.createElement('pretty-json')
-        prettyJson.title = eventData
-        prettyJson.innerText = eventData
-    } catch (e){
-        console.error('CAUGHT ERROR!', e)
-    }
-    const dataContents = document.createElement('td')
-    dataContents.classList.add('large-cell')
-    dataContents.appendChild(prettyJson)
+    const count = filters.count ? `<td class="x-small-cell">${++rowContentCount}</td>` : ''
+    const timestamp = filters.timestamp ? `<td class="small-cell">${message.timeStamp}</td>` : ''
+    const name = filters.name ? `<td class="small-cell">${message.event.name}</td>` : ''
+    const feature = filters.feature ? `<td class="small-cell">${message.event.feature}</td>` : ''
 
-    const row = document.createElement('tr')
-    row.innerHTML = `
+    let msgData
+    try{
+        msgData = !!dataFilter ? {[dataFilter]: findAttribute(message.event.data, dataFilter)} : message.event.data
+    } catch(err){
+        // do nothing for now
+    }
+
+    function findAttribute(obj, attr){
+        if (obj === null || obj === undefined || typeof obj !== 'object') return null
+        if (obj.hasOwnProperty(attr)) return obj[attr]
+        for (const key in obj) {
+            if (typeof obj[key] === 'object') {
+                const result = findAttribute(obj[key], attr);
+                if (result) return result;
+            }
+        }
+        return null;
+    }
+
+    const dataString = JSON.stringify(msgData || '')
+    let trunctatedData = dataString ? dataString.substring(0, 400) : ''
+    if (trunctatedData.length === 400) trunctatedData += ' ...'
+    const dataContents = filters['raw-data'] ? `<td title="Click to expand" data-unique-id=${message.uniqueId} class="large-cell clickable" style="padding-right: 25px;">${trunctatedData}</td>` : ''
+    
+    // TODO: chrome ext. wont let you use inline functions.  gotta figure out a way to allow a click on the TD to get the raw event from the background worker.
+    
+    const row = `<tr class="${message.event.name}">
+    ${count}
     ${timestamp}
     ${name}
     ${feature}
+    ${dataContents}
+    </tr>
     `
-    row.appendChild(dataContents)
-    row.classList.add(message.event.name)
 
-    document.querySelector('#content>table>#table-body').appendChild(row)
-    if (autoScroll) row.scrollIntoView({ block: 'end',  behavior: 'smooth' })
-    document.querySelector('#event-count').innerText = data.size
+    rowContent += row
 }
+
+function getRawEvent(uniqueId){
+    chrome.runtime.sendMessage({ message: 'get_raw_event', uniqueId }, (response) => {
+        console.log("GOT RESPONSE", response)
+    })
+}
+
+document.querySelector('#expand-header>#close').addEventListener('click', (evt) => {
+    document.querySelector('#expand').classList.add('hidden')
+    document.querySelector('table').classList.remove('hidden')
+})
 
 
 document.querySelectorAll('input').forEach(input => {
@@ -128,22 +251,33 @@ document.querySelectorAll('input').forEach(input => {
                 return // dont affect the filters with this one
             }
 
+            console.log('input changed', event.target.value, event.target.checked)
             filters[event.target.value] = event.target.checked
-            reRenderData()
+            if (['timestamp', 'name', 'type', 'feature', 'raw-event'].includes(event.target.value)) renderHeader()
+            else debouncedReRender()
         } 
-        if (event.target.type === 'text') {
+
+        console.log(event.target.id)
+        if (event.target.id === 'search') {
             textSearch = event.target.value
-            reRenderData()
+            debouncedReRender()
+        }
+        if (event.target.id === 'data-filter') {
+            console.log("SETTING DATA FILTER", event.target.value)
+            dataFilter = event.target.value
+            debouncedReRender()
         }
     })
 })
 
 document.querySelector('#clear-data').addEventListener('click', () => {
     chrome.runtime.sendMessage({ message: 'clear_data' }, (response) => {
-        data = new Set()
+        data = []
+        rowContent = ''
+        rowContentCount = 0
         uniqueIds = new Set()
-        document.querySelector('#event-count').innerText = data.size
-        reRenderData()
+        document.querySelector('#event-count').innerText = data.length
+        debouncedReRender()
     })
 })
 

@@ -44,6 +44,32 @@ p {
     width: 100vw;
 }
 
+#expand{
+    padding: 20px;
+    width: 100vw;
+    overflow-x: hidden;
+    scrollbar-color: #5dcb9b #192129;
+    scrollbar-width: thin;
+    background-color: #ffdbc2;
+    color: #192129;
+    min-height: 80vh;
+}
+
+#expand-title{
+    font-size: 20px;
+    color: #192129;
+}
+
+#expand-header>#close {
+    position: sticky;
+    right: 0;
+    top: 0;
+    padding: 10px;
+    background-color: #ffdbc2;
+    color: #192129;
+    border-radius: 5px;
+}
+
 table{
     padding: inherit 5px;
     width: 100vw;
@@ -115,6 +141,9 @@ tr{
 }
 
 
+.x-small-cell{
+    max-width: 25px !important;
+}
 
 .small-cell{
     max-width: 10vw !important;
@@ -122,6 +151,7 @@ tr{
 
 .large-cell{
     max-width: 60vw;
+    word-break: break-all;
 }
 
 .hidden {
@@ -148,6 +178,22 @@ button {
 }
 
 button:hover {
-    background-color: #333;
+    background-color: #333 !important;
     cursor: pointer;
+}
+
+.clickable{
+    cursor: pointer !important;
+}
+.clickable:hover{
+    background-color: #ddd !important;
+}
+
+#loading{
+    color: red !important;
+}
+
+#loading > img {
+    width: 16px;
+    height: 16px;
 }
