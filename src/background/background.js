@@ -16,15 +16,9 @@ chrome.runtime.onMessage.addListener(function(request, sender, sendResponse) {
             if (!!devPanel){
                 const uniqueId = generateUniqueId(request)
                 request.uniqueId = uniqueId
-                if (!rawEvents.has(uniqueId)) {
-                    rawEvents.set(uniqueId, [request])
-                }
                 devPanel.postMessage(request)
             }
             break;
-        case 'get_raw_event':
-            console.log('get_raw_event', request)
-            return sendResponse({message: 'raw_event', data: rawEvents.get(request.uniqueId)});
         case 'content_ready':
             if (!!devPanel) devPanel.postMessage(request)
             break;
@@ -51,5 +45,3 @@ function generateUniqueId(obj) {
         return Math.random().toString()
     }
   }
-
-const rawEvents = new Map()

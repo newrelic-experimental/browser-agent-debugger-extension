@@ -32,6 +32,7 @@ p {
 #toolbar {
     position: sticky;
     top: 0;
+    z-index: 9999;
     background-color: #192129;;
     padding-bottom: 5px;
     width: calc(100vw - 20px);
@@ -140,17 +141,25 @@ tr{
     color: black;
 }
 
+.ten-wide{
+    max-width: 10ch !important;
+}
+
+.hundred-wide{
+    max-width: 100ch !important;
+}
 
 .x-small-cell{
-    max-width: 25px !important;
+    max-width: 5vw !important;
 }
 
 .small-cell{
-    max-width: 10vw !important;
+    max-width: 15vw !important;
+    word-break: break-all;
 }
 
 .large-cell{
-    max-width: 60vw;
+    max-width: 50vw;
     word-break: break-all;
 }
 

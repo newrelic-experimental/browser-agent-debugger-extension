@@ -68,8 +68,8 @@
                 </div>
                 <hr data-hideable class="hidden"/>
                 <div data-hideable class="hidden">
-                    <input type="text" id="search" placeholder="Search Filter" style="width:calc(100vw - 40px);">
-                    <input type="text" id="data-filter" placeholder="Data Attribute - Data will only show the relevant field" style="width:calc(100vw - 40px);">
+                    <input type="text" id="search" placeholder="Data Filter" style="width:calc(100vw - 40px);">
+                    <input type="text" id="data-filter" placeholder="Attribute Search - Populates the 'Attribute Search' column with attribute matches" style="width:calc(100vw - 40px);">
                 </div>
             </div>
             <div id="no-content">
@@ -81,10 +81,10 @@
             <table>
                 <thead id="table-header">
                     <tr>
-                        <th>Count</th>
                         <th>Timestamp</th>
                         <th>Name</th>
                         <th>Feature</th>
+                        <th id="attribute-search-header">Attribute Search</th>
                         <th>Data</th>
                     </tr>
                 </thead>
