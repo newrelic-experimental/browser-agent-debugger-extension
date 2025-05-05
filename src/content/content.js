@@ -16,6 +16,7 @@ class NREvent {
 let events = [
     new NREvent({timeStamp: 0, loaded: false, type: 'window', name: 'origin', data: window.location + ''})
 ]
+let eventLimit = 1000
 
 
 window.addEventListener('load', (evt) => {
@@ -26,6 +27,9 @@ window.addEventListener('load', (evt) => {
         name: 'window-load',
         data: window.location + ''
     })
+    if (events.length > eventLimit){
+        events.shift()
+    }
     events.push(event)
     reportEvent(event)
 
@@ -46,6 +50,9 @@ document.addEventListener('DOMContentLoaded', (evt) => {
         name: 'dom-content-loaded',
         data: window.location + ''
     })
+    if (events.length > eventLimit){
+        events.shift()
+    }
     events.push(event)
     reportEvent(event)
 })
@@ -58,6 +65,9 @@ window.addEventListener('popstate', function(evt) {
         name: 'navigate',
         data: evt.target.location + ''
     })
+    if (events.length > eventLimit){
+        events.shift()
+    }
     events.push(event)
     reportEvent(event)
   });
@@ -72,6 +82,10 @@ chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
         case 'clear_data':
             events = []
             break;
+        case 'limit':
+            eventLimit = request.limit
+            break;
+
     }
     sendResponse({ message: 'got your message in content.js!' });
 })
@@ -82,6 +96,9 @@ chrome.runtime.sendMessage({ message: 'content_ready' })
 })
 
 window.addEventListener('newrelic', (event) => {
+    if (events.length > eventLimit){
+        events.shift()
+    }
     events.push(event)
     reportEvent(event)
 })

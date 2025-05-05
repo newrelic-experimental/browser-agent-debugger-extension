@@ -32,6 +32,7 @@ p {
 #toolbar {
     position: sticky;
     top: 0;
+    z-index: 9999;
     background-color: #192129;;
     padding-bottom: 5px;
     width: calc(100vw - 20px);
@@ -42,6 +43,32 @@ p {
 
 #content {
     width: 100vw;
+}
+
+#expand{
+    padding: 20px;
+    width: 100vw;
+    overflow-x: hidden;
+    scrollbar-color: #5dcb9b #192129;
+    scrollbar-width: thin;
+    background-color: #ffdbc2;
+    color: #192129;
+    min-height: 80vh;
+}
+
+#expand-title{
+    font-size: 20px;
+    color: #192129;
+}
+
+#expand-header>#close {
+    position: sticky;
+    right: 0;
+    top: 0;
+    padding: 10px;
+    background-color: #ffdbc2;
+    color: #192129;
+    border-radius: 5px;
 }
 
 table{
@@ -114,14 +141,26 @@ tr{
     color: black;
 }
 
+.ten-wide{
+    max-width: 10ch !important;
+}
 
+.hundred-wide{
+    max-width: 100ch !important;
+}
+
+.x-small-cell{
+    max-width: 5vw !important;
+}
 
 .small-cell{
-    max-width: 10vw !important;
+    max-width: 15vw !important;
+    word-break: break-all;
 }
 
 .large-cell{
-    max-width: 60vw;
+    max-width: 50vw;
+    word-break: break-all;
 }
 
 .hidden {
@@ -148,6 +187,22 @@ button {
 }
 
 button:hover {
-    background-color: #333;
+    background-color: #333 !important;
     cursor: pointer;
+}
+
+.clickable{
+    cursor: pointer !important;
+}
+.clickable:hover{
+    background-color: #ddd !important;
+}
+
+#loading{
+    color: red !important;
+}
+
+#loading > img {
+    width: 16px;
+    height: 16px;
 }
