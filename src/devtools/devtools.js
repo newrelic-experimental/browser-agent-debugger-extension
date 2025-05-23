@@ -32,6 +32,7 @@ const filters = {
     spa: true,
     shared_aggregator: true,
     session: true,
+    warn: true,
     // attributes
     timestamp: true,
     name: true,
@@ -162,7 +163,7 @@ const debouncedRender = debounce(render, 1000)
 function appendMessage(message) {
     document.querySelector('#no-content').classList.toggle('hidden', !!data.length)
     document.querySelector('#loading').classList.toggle('hidden', !data.length)
-    if (!message.event || !filters[message.event.name] || !filters[message.event.type] || !filters[message.event.feature]) return
+    if (!message.event || filters[message.event.name] === false || filters[message.event.type] === false || filters[message.event.feature] === false) return
     if (!!textSearch && JSON.stringify(message).indexOf(textSearch) === -1) return
     const timestamp = filters.timestamp ? `<td class="x-small-cell">${message.timeStamp}</td>` : '</td><td>'
     const name = filters.name ? `<td class="small-cell">${message.event.name}</td>` : '</td><td>'
