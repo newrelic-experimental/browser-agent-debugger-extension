@@ -111,6 +111,11 @@ tr{
     border-radius: 2px;
 }
 
+tbody > tr {
+    background-color: #f2b4a3;
+    color: black;
+}
+
 .origin, .window-load, .dom-content-loaded, .navigate {
     background-color: #f2b4a3;
     color: black;
